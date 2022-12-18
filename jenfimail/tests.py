@@ -280,3 +280,24 @@ class PostMasterServiceTest(TestCase):
         cost, schedule = optimizer_service.minimize_cost(lines, trains, parcels)
         self.assertTrue(cost)
         self.assertTrue(schedule)
+
+        calculated_cost = 0
+        calculated_weight = 0
+        calculated_volume = 0
+        for train, line in schedule:
+            calculated_cost += train.cost
+            calculated_weight += train.weight_capacity
+            calculated_volume += train.volume_capacity
+
+        self.assertEqual(cost, calculated_cost)
+        self.assertTrue(sum([p.weight for p in parcels]) <= calculated_weight)
+        self.assertTrue(sum([p.volume for p in parcels]) <= calculated_volume)
+
+    def test_optimize_infeasible(self):
+        trains = Train.objects.all()
+        lines = Line.objects.all()
+        parcels = Parcel.objects.all()
+
+        cost, schedule = optimizer_service.minimize_cost(lines, trains, parcels)
+        self.assertFalse(cost)
+        self.assertFalse(schedule)
