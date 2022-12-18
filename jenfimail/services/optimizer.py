@@ -1,5 +1,7 @@
-from pulp import LpMinimize, LpMaximize, LpProblem, LpStatus, lpSum, LpVariable
 from django.db import transaction
+from django.db.models import Sum
+
+from pulp import LpMinimize, LpMaximize, LpProblem, LpStatus, lpSum, LpVariable
 import numpy as np
 
 class OptimizerService():
@@ -16,8 +18,8 @@ class OptimizerService():
     def minimize_cost(self, lines, trains, parcels):
         lines = [line.id for line in lines]
         trains = list(trains)
-        parcel_volume = sum([parcel.volume for parcel in parcels])
-        parcel_weight = sum([parcel.weight for parcel in parcels])
+        parcel_volume = parcels.aggregate(Sum('volume')) #sum([parcel.volume for parcel in parcels])
+        parcel_weight = parcels.aggregate(Sum('weight')) #sum([parcel.weight for parcel in parcels])
 
         model = LpProblem(name=self.problem_name, sense=self.SENSE)
 
@@ -67,5 +69,3 @@ class OptimizerService():
         for parcel in shipment.parcels.all():
             parcel.cost = round(parcel.weight * cost_per_weight * (1 + self.profit_margin_percentage), 2)
             parcel.save()
-
-
