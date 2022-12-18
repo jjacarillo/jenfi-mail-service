@@ -13,7 +13,6 @@ class OptimizerService():
         self.problem_name = args.get('name', 'mail-scheduler')
         self.shift_duration_hrs = args.get('shift_duration', 3)
         self.shifts_per_day = 24 / self.shift_duration_hrs
-        self.profit_margin_percentage = float(args.get('profit_margin_percentage', 0))
 
     def minimize_cost(self, lines, trains, parcels):
         lines = [line.id for line in lines]
@@ -62,10 +61,3 @@ class OptimizerService():
             i += 1
 
         return model.objective.value(), schedule
-
-    @transaction.atomic
-    def set_optimal_cost(self, shipment):
-        cost_per_weight = shipment.train.cost / shipment.weight
-        for parcel in shipment.parcels.all():
-            parcel.cost = round(parcel.weight * cost_per_weight * (1 + self.profit_margin_percentage), 2)
-            parcel.save()

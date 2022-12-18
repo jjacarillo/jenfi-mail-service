@@ -7,10 +7,12 @@ from ..models import Line, Train, Parcel, Shipment
 from ..custom_exceptions import LineNotValidException, LineNotAvailableException
 
 class PostMasterService():
-    def __init__(self, train_service, parcel_service, optimizer_service):
+    def __init__(self, train_service, parcel_service, optimizer_service, **args):
         self.train_service = train_service
         self.parcel_service = parcel_service
         self.optimizer_service = optimizer_service
+
+        self.profit_margin_percentage = float(args.get('profit_margin_percentage', 0))
 
     def create_line(self, data):
         line = Line(**data)
@@ -60,9 +62,15 @@ class PostMasterService():
         return True
 
     def _send_train(self, train, line):
-        self.optimizer_service.set_optimal_cost(train.shipment)
+        self.set_parcel_costs(train.shipment)
         train.shipment.departure_date = datetime.now(timezone.utc)
         train.shipment.arrival_date = train.shipment.departure_date  + timedelta(hours=settings.TRAIN_TRAVEL_TIME_HRS)
         train.shipment.save()
         return train.shipment
 
+    @transaction.atomic
+    def set_parcel_costs(self, shipment, **args):
+        cost_per_weight = args.get('cost_per_weight', shipment.train.cost / shipment.weight)
+        for parcel in shipment.parcels.all():
+            parcel.cost = round(parcel.weight * cost_per_weight * (1 + self.profit_margin_percentage), 2)
+            parcel.save()
