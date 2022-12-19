@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .services import TrainOperatorService, PostMasterService, ParcelService, OptimizerService
-from .custom_exceptions import LineNotValidException, LineNotAvailableException
+from .custom_exceptions import LineNotValidException, LineNotAvailableException, LinesNotFoundException, NoParcelsToLoadException
 from .models import Train, Line, Parcel
 
 train_operator_service = TrainOperatorService()
@@ -62,10 +62,7 @@ class TrainOpearatorServiceTest(TestCase):
             'cost': 200,
             'lines': ['X']
         }
-        try:
-            self.assertFalse(train_operator_service.bid_train(train_data))
-        except Exception as e:
-            self.assertEqual(str(e), 'lines not found')
+        self.assertRaises(LinesNotFoundException, train_operator_service.bid_train, train_data)
 
     def test_bid_train(self):
         train_data = {
@@ -266,11 +263,7 @@ class PostMasterServiceTest(TestCase):
         self.assertEqual(self.train_james.cost, shipment.revenue)
 
     def test_ship_train_small(self):
-        try:
-            shipment = post_master_service.ship_train(self.train_percy, self.train_percy.lines.first())
-            self.asserTrue(False)
-        except Exception as e:
-            self.assertEqual(str(e), 'no parcels to load')
+        self.assertRaises(NoParcelsToLoadException, post_master_service.ship_train, self.train_percy, self.train_percy.lines.first())
 
     def test_optimize_feasible(self):
         trains = Train.objects.all()

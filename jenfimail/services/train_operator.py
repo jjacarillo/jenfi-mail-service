@@ -1,4 +1,5 @@
 from ..models import Train, Line
+from ..custom_exceptions import LinesNotFoundException
 
 class TrainOperatorService():
 
@@ -6,7 +7,7 @@ class TrainOperatorService():
         line_ids = data.get('lines', [])
         lines = Line.objects.filter(name__in=line_ids).all()
         if not lines:
-            raise Exception('lines not found')
+            raise LinesNotFoundException()
 
         train = Train(name=data.get('name'))
         train.cost = float(data.get('cost'))
@@ -20,7 +21,7 @@ class TrainOperatorService():
     def withdraw_train(self, name):
         train = Train.objects.get(name=name)
         if not train:
-            raise Exception('train not found')
+            raise LinesNotFoundException()
 
         train.withdraw()
         train.save()

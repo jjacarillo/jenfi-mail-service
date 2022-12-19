@@ -4,7 +4,7 @@ from django.conf import settings
 from datetime import datetime, timedelta, timezone
 
 from ..models import Line, Train, Parcel, Shipment
-from ..custom_exceptions import LineNotValidException, LineNotAvailableException
+from ..custom_exceptions import LineNotValidException, LineNotAvailableException, NoParcelsToLoadException, FailedToLoadParcelsException
 
 class PostMasterService():
     def __init__(self, train_service, parcel_service, optimizer_service, **args):
@@ -32,7 +32,7 @@ class PostMasterService():
 
         parcels = self.parcel_service.get_parcels_to_fill_capacity(train.capacity)
         if not parcels:
-            raise Exception('no parcels to load')
+            raise NoParcelsToLoadException()
 
         self._book_train(train)
         self._fill_train(train, line, parcels)
@@ -54,7 +54,7 @@ class PostMasterService():
             parcel.shipment = train.shipment
 
             if weight_load > train.weight_capacity or volume_load > train.volume_capacity:
-                raise Exception('failed to load parcels')
+                raise FailedToLoadParcelsException()
 
             parcel.save()
             train.shipment.parcels.add(parcel)
@@ -74,3 +74,15 @@ class PostMasterService():
         for parcel in shipment.parcels.all():
             parcel.cost = round(parcel.weight * cost_per_weight * (1 + self.profit_margin_percentage), 2)
             parcel.save()
+
+    """ TO DO: may be out of scope
+    def schedule_shipments(self, **args):
+        lines = Line.objects.all()
+        trains = self.train_operator_service.get_available_trains()
+        total_capacity = (trains.aggregate(Sum('weight_capacity')), trains.aggregate(Sum('volume_capacity')))
+        parcels = self.parcel_service.get_parcels_within_capacity(total_capacity)
+        cost, schedule = optimizer_service.minimize_cost(lines, trains, parcels)
+
+        earliest_departure_date = args.get('earliest_departure_date', datetime.now(timezone.utc) + timedelta(hours=settings.TRAIN_TRAVEL_TIME_HRS))
+    """
+
