@@ -105,6 +105,9 @@ class Parcel(models.Model):
 
     class Meta:
         ordering = ['created_at']
+        indexes = [
+            models.Index(fields=['weight', 'volume', 'withdrawn_at'])
+        ]
 
 class Shipment(models.Model):
     train = models.OneToOneField(Train, on_delete=models.RESTRICT)

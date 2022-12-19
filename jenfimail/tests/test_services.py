@@ -216,6 +216,8 @@ class PostMasterServiceTest(TestCase):
         self.parcel_biggest = parcel_service.deposit_parcel({ 'label': 'biggest - can never fit', 'weight': 200, 'volume': 1000 })
         self.parcel_big = parcel_service.deposit_parcel({ 'label': 'big', 'weight': 300, 'volume': 500 })
         self.parcel_big2 = parcel_service.deposit_parcel({ 'label': 'big', 'weight': 100, 'volume': 300 })
+        self.parcel_withdrawn  = parcel_service.deposit_parcel({ 'label': 'small-withdrawn', 'weight': 1, 'volume': 5 })
+        parcel_service.withdraw_parcel(self.parcel_withdrawn.id)
         self.parcel_small1 = parcel_service.deposit_parcel({ 'label': 'small-0001', 'weight': 2, 'volume': 30 })
         self.parcel_medium1 = parcel_service.deposit_parcel({ 'label': 'medium-0001', 'weight': 20, 'volume': 100 })
         self.parcel_small2 = parcel_service.deposit_parcel({ 'label': 'small-0002', 'weight': 5, 'volume': 60 })

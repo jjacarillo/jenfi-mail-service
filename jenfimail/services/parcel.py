@@ -44,8 +44,7 @@ class ParcelService():
 
     def get_parcels_within_capacity(self, capacity):
         weight_capacity, volume_capacity = capacity
-        return Parcel.objects.filter(volume__lte=volume_capacity, weight__lte=weight_capacity, shipment=None)
-
+        return Parcel.objects.filter(volume__lte=volume_capacity, weight__lte=weight_capacity, shipment=None, withdrawn_at=None)
     def is_fillable(self, capacity):
         weight_capacity, volume_capacity = capacity
         if not weight_capacity or not volume_capacity:
