@@ -41,7 +41,7 @@ class PostMasterService():
 
         return status
 
-    def ship_train(self, train, line):
+    def ship_train(self, train, line, optimized_cost_per_weight=None):
         if line not in train.lines.all():
             raise LineNotValidException()
         if line in self.get_unavailable_lines(train):
@@ -52,7 +52,7 @@ class PostMasterService():
             raise NoParcelsToLoadException()
 
         self._book_train(train)
-        self._fill_train(train, line, parcels)
+        self._fill_train(train, line, parcels, optimized_cost_per_weight=None)
         return  self._send_train(train, line)
 
     def _book_train(self, train):
@@ -61,8 +61,10 @@ class PostMasterService():
         return train
 
     @transaction.atomic
-    def _fill_train(self, train, line, parcels):
+    def _fill_train(self, train, line, parcels, optimized_cost_per_weight=None):
         train.shipment = Shipment(train=train, line=line)
+        if optimized_cost_per_weight:
+            train.shipment = optimized_cost_per_weight
         train.shipment.save()
         weight_load, volume_load = (0, 0)
         for parcel in parcels:
@@ -86,8 +88,8 @@ class PostMasterService():
         return train.shipment
 
     @transaction.atomic
-    def set_parcel_costs(self, shipment, **args):
-        cost_per_weight = args.get('cost_per_weight', shipment.train.cost / shipment.weight)
+    def set_parcel_costs(self, shipment):
+        cost_per_weight = shipment.optimized_cost_per_weight or (shipment.train.cost / shipment.weight)
         for parcel in shipment.parcels.all():
             parcel.cost = round(parcel.weight * cost_per_weight * (1 + self.profit_margin_percentage), 2)
             parcel.save()

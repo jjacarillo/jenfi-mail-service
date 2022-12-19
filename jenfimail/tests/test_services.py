@@ -270,7 +270,7 @@ class PostMasterServiceTest(TestCase):
     def test_optimize_feasible(self):
         trains = Train.objects.all()
         lines = Line.objects.all()
-        parcels = Parcel.objects.all()[2:]
+        parcels = Parcel.objects.filter(withdrawn_at=None, shipment=None)[2:]
 
         cost, schedule = optimizer_service.minimize_cost(lines, trains, parcels)
         self.assertTrue(cost)
@@ -291,7 +291,7 @@ class PostMasterServiceTest(TestCase):
     def test_optimize_infeasible(self):
         trains = Train.objects.all()
         lines = Line.objects.all()
-        parcels = Parcel.objects.all()
+        parcels = Parcel.objects.filter(withdrawn_at=None, shipment=None)
 
         cost, schedule = optimizer_service.minimize_cost(lines, trains, parcels)
         self.assertFalse(cost)

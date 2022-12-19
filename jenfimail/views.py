@@ -50,7 +50,7 @@ def ship_train(request, train_id, line_id):
     try:
         train = Train.objects.get(pk=train_id)
         line = Line.objects.get(pk=line_id)
-        shipment = post_master_service.ship_train(train, line)
+        shipment = post_master_service.ship_train(train, line, request.data.get('optimized_cost_per_weight'))
         serializer = ShipmentSerializer(shipment)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as e:

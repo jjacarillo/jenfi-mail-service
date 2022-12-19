@@ -115,6 +115,7 @@ class Shipment(models.Model):
     departure_date = models.DateTimeField(null=True)
     arrival_date = models.DateTimeField(null=True)
     line = models.ForeignKey(Line, on_delete=models.RESTRICT)
+    optimized_cost_per_weight = models.FloatField(null=True)
 
     STATUS_IN_TRANSIT = 'in transit'
     STATUS_ARRIVED  = 'arrived'
