@@ -24,6 +24,23 @@ class PostMasterService():
         in_transit_shipments = Shipment.objects.filter(arrival_date__gt=utc_now).all()
         return [shipment.line for shipment in in_transit_shipments]
 
+    def get_train_status(self, train_id):
+        status = {
+            'line': None,
+            'departure_date': None,
+            'parcels': [],
+        }
+        try:
+            shipment = Shipment.objects.get(train__id=train_id)
+        except Shipment.DoesNotExist:
+            return status
+
+        status['line'] = shipment.line.id
+        status['departure_date'] = shipment.departure_date
+        status['parcels'] = [parce.id for parcel in shipment.parcels]
+
+        return status
+
     def ship_train(self, train, line):
         if line not in train.lines.all():
             raise LineNotValidException()

@@ -1,4 +1,7 @@
+from datetime import datetime, timedelta, timezone
+
 from ..models import Parcel
+from ..custom_exceptions import ParcelNotPendingException
 
 class ParcelService():
 
@@ -7,6 +10,16 @@ class ParcelService():
         parcel.save()
         return parcel
 
+    def withdraw_parcel(self, parcel_id):
+        parcel = Parcel.objects.get(pk=parcel_id)
+        if parcel.status != Parcel.STATUS_PENDING:
+            raise ParcelNotPendingException()
+
+        parcel.withdrawn_at = datetime.now(timezone.utc)
+        parcel.save()
+        return parcel
+
+    """
     def transport_parcel(self, parcel_id):
         parcel = Parcel.objects.get(pk=parcel_id)
 
@@ -20,6 +33,7 @@ class ParcelService():
         parcel.ship()
         parcel.save()
         return parcel
+    """
 
     def is_shipped(self, parcel_id):
         parcel = Parcel.objects.get(pk=parcel_id)

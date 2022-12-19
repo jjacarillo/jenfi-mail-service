@@ -185,6 +185,7 @@ class ParcelOwnerServiceTest(TestCase):
 
 class PostMasterServiceTest(TestCase):
     SHIPMENT_STATUS_IN_TRANSIT = 'in transit'
+    PARCEL_STATUS_IN_TRANSIT = 'in transit'
 
     def setUp(self):
         self.line_a = post_master_service.create_line({ 'name': 'A' })
@@ -242,6 +243,7 @@ class PostMasterServiceTest(TestCase):
         weight, volume, = 0, 0
         prev_parcel = None
         for parcel in shipment.parcels.all():
+            self.assertTrue(parcel.status, self.PARCEL_STATUS_IN_TRANSIT)
             weight += parcel.weight
             volume += parcel.volume
             if prev_parcel:

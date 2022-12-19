@@ -52,7 +52,7 @@ class Parcel(models.Model):
     cost = models.FloatField(null=True)
     description = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_withdrawn = models.BooleanField(default=False)
+    withdrawn_at = models.DateTimeField(null=True)
     shipment = models.ForeignKey('Shipment', on_delete=models.RESTRICT, blank=True, null=True)
 
     STATUS_PENDING = 'pending'
@@ -84,7 +84,7 @@ class Parcel(models.Model):
 
     @property
     def status(self):
-        if self.is_withdrawn:
+        if self.withdrawn_at:
             return self.STATUS_WITHDRAWN
 
         if not self.shipment:

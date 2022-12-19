@@ -23,3 +23,7 @@ class FailedToLoadParcelsException(Exception):
         self.message = 'failed to load parcels'
         super().__init__(self.message)
 
+class ParcelNotPendingException(Exception):
+    def __init__(self):
+        self.message = 'unable to withdraw parcel not in pending state'
+        super().__init__(self.message)

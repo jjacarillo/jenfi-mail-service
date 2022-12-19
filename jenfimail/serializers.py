@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Line, Train, Parcel
+from .models import Line, Train, Parcel, Shipment
 
 class LineSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class TrainSerializer(serializers.ModelSerializer):
 class ParcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Parcel
-        fields = ['id', 'name', 'cost', 'weight', 'volume', 'status', 'train']
+        fields = ['id', 'label', 'weight', 'volume', 'status', 'cost']
+
+class ShipmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shipment
+        fields = ['id',  'train', 'line', 'parcels', 'weight', 'volume', 'status']
