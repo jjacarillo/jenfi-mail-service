@@ -18,8 +18,8 @@ class TrainOperatorService():
 
         return train
 
-    def withdraw_train(self, name):
-        train = Train.objects.get(name=name)
+    def withdraw_train(self, train_id):
+        train = Train.objects.get(pk=train_id)
         if not train:
             raise LinesNotFoundException()
 

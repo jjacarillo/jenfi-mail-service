@@ -82,8 +82,7 @@ class TrainOpearatorServiceTest(TestCase):
         self.assertEqual(train.status, self.STATUS_OPEN)
 
     def test_withdraw_train(self):
-        train_name = self.train_thomas.name
-        train = train_operator_service.withdraw_train(train_name)
+        train = train_operator_service.withdraw_train(self.train_thomas.id)
 
         self.assertTrue(train)
         self.assertEqual(train.status, self.STATUS_WITHDRAWN)
@@ -95,7 +94,7 @@ class TrainOpearatorServiceTest(TestCase):
         self.assertEqual(self.STATUS_OPEN, trains[0].status)
 
     def test_get_available_trains_withdrawn(self):
-        train_operator_service.withdraw_train(self.train_thomas.name)
+        train_operator_service.withdraw_train(self.train_thomas.id)
 
         trains = train_operator_service.get_available_trains()
         self.assertFalse(trains)

@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 
 class Line(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=250)
+    description = models.CharField(max_length=250, null=True, blank=True)
 
 class Train(models.Model):
     name = models.CharField(max_length=50)
