@@ -1,7 +1,7 @@
 from django.test import TestCase
-from .services import TrainOperatorService, PostMasterService, ParcelService, OptimizerService
-from .custom_exceptions import LineNotValidException, LineNotAvailableException, LinesNotFoundException, NoParcelsToLoadException
-from .models import Train, Line, Parcel
+from ..services import TrainOperatorService, PostMasterService, ParcelService, OptimizerService
+from ..custom_exceptions import LineNotValidException, LineNotAvailableException, LinesNotFoundException, NoParcelsToLoadException
+from ..models import Train, Line, Parcel
 
 train_operator_service = TrainOperatorService()
 parcel_service = ParcelService()
@@ -23,7 +23,6 @@ class PostMasterServiceTest(TestCase):
         line = post_master_service.create_line(line_data)
         self.assertEqual(line.name, line_data.get('name'))
         self.assertEqual(line.description, line_data.get('description'))
-        self.assertTrue(line.available)
 
     def test_create_duplicate_line(self):
         line_data = {
