@@ -30,4 +30,4 @@ All of business logic are in the services which serves as controller.
 ### Optimization Solution  
 https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/services/optimizer.py
 
-...
+Documentation: https://docs.google.com/document/d/1tf5Vwiqh-ZUwlxIu6y7f2SSRgMI1AXISnjvqy_Pc73Q/edit?usp=sharing
