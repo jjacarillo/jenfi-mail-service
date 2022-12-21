@@ -26,7 +26,7 @@ The models are strictly used for data access and schema design. It contains no l
 
 All of business logic are in the services which serves as controller.   
 <b><i>services:</i></b> https://github.com/jjacarillo/jenfi-mail-service/tree/develop/jenfimail/services</i></b>
-
+en
 ### Optimization Solution  
 https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/services/optimizer.py
 
@@ -58,7 +58,7 @@ API endpoints:
 http://127.0.0.1:8000/api/ - API index page  
 For complete list of endpoints and usage see [test_api.py](https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/tests/test_api.py#L61)
 
-REST enpoints: (not fully implemented)  
+REST endpoints: (not fully implemented)  
 http://127.0.0.1:8000/lines/  
 http://127.0.0.1:8000/trains/  
 http://127.0.0.1:8000/parcels/  
