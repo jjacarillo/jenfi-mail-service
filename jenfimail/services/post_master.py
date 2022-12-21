@@ -4,6 +4,7 @@ from django.conf import settings
 from datetime import datetime, timedelta, timezone
 
 from ..models import Line, Train, Parcel, Shipment
+from ..serializers import ParcelSerializer
 from ..custom_exceptions import LineNotValidException, LineNotAvailableException, NoParcelsToLoadException, FailedToLoadParcelsException
 
 class PostMasterService():
@@ -37,7 +38,7 @@ class PostMasterService():
 
         status['line'] = shipment.line.id
         status['departure_date'] = shipment.departure_date
-        status['parcels'] = [parce.id for parcel in shipment.parcels]
+        status['parcels'] = ParcelSerializer(shipment.parcels, many=True).data
 
         return status
 

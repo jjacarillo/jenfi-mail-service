@@ -136,4 +136,4 @@ class APITest(TestCase):
         self.assertTrue(status.is_success(response.status_code))
         self.assertTrue(response.data.get('line'))
         self.assertTrue(response.data.get('train'))
-        self.assertTrue(response.data.get('parcels'))
+        self.assertTrue(len(response.data.get('parcels', [])))
