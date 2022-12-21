@@ -26,7 +26,7 @@ The models are strictly used for data access and schema design. It contains no l
 
 All of business logic are in the services which serves as controller.   
 <b><i>services:</i></b> https://github.com/jjacarillo/jenfi-mail-service/tree/develop/jenfimail/services</i></b>
-en
+
 ### Optimization Solution  
 https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/services/optimizer.py
 
