@@ -31,3 +31,38 @@ All of business logic are in the services which serves as controller.
 https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/services/optimizer.py
 
 [Jenfi Mail Service Optimization Documentation.pdf](https://github.com/jjacarillo/jenfi-mail-service/files/10273665/Jenfi.Mail.Service.Optimization.Documentation.pdf)
+
+### Quick Setup
+1. Install python 3 (3.9 or lower) -- use pyenv if you have different python versions
+2. Clone repo
+3. Install PostgresSQL and create database named `jenfi_test`
+4. Inside project directory install dependencies and run migrations
+
+```shell
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+```
+5. Run server
+```shell
+python manage.py runserver
+```
+This should start the app at port 8000
+
+### Testing
+Run unit tests  
+```shell
+python manage.py test
+```
+API endpoints:
+http://127.0.0.1:8000/api/ - API index page  
+For complete list of endpoints and usage see [test_api.py](https://github.com/jjacarillo/jenfi-mail-service/blob/develop/jenfimail/tests/test_api.py#L61)
+
+REST enpoints: (not fully implemented)  
+http://127.0.0.1:8000/lines/  
+http://127.0.0.1:8000/trains/  
+http://127.0.0.1:8000/parcels/  
+
+You can test them out from the browser or using curl.
+
+
