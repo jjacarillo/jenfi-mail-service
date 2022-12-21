@@ -17,6 +17,8 @@ class ParcelSerializer(serializers.ModelSerializer):
         fields = ['id', 'label', 'weight', 'volume', 'status', 'cost']
 
 class ShipmentSerializer(serializers.ModelSerializer):
+    parcels = ParcelSerializer(read_only=True, many=True)
+
     class Meta:
         model = Shipment
         fields = ['id',  'train', 'line', 'parcels', 'weight', 'volume', 'status']
